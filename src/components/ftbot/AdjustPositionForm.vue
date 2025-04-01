@@ -17,10 +17,17 @@ const props = defineProps({
 const model = defineModel<boolean>();
 const botStore = useBotStore();
 const form = ref<HTMLFormElement>();
-const amount = ref<number | undefined>(undefined);
+const amount = ref<number>(0);
 const availableBalance = ref<number>(0);
 const currentTime = ref(new Date());
-const emit = defineEmits(['update:modelValue', 'confirmAdjustPosition']);
+const emit = defineEmits<{
+  (e: 'update:modelValue', value: boolean): void;
+  (e: 'confirmAdjustPosition', payload: {
+    amount: number;
+    botId: string;
+    trade_id: string
+  }): void;
+}>();
 let timer: number;
 
 
@@ -94,9 +101,7 @@ const fetchBalance = async () => {
   }
 };
 
-const resetForm = () => {
-  amount.value = props.trade.amount;
-};
+
 
 const checkFormValidity = () => {
   return form.value?.checkValidity();
@@ -114,6 +119,8 @@ async function handleSubmit() {
     alert('补仓数量必须大于 0');
     return;
   }
+  console.log('handleSubmit', amount.value, props.trade.botId, props.trade.trade_id);
+
   emit('confirmAdjustPosition', { amount: amount.value, botId: props.trade.botId, trade_id: props.trade.trade_id  });
   model.value = false;
 }
@@ -135,20 +142,13 @@ watch(
   async (newValue) => {
     if (newValue) {
       await fetchBalance();
-      resetForm();
     }
   }
 );
+const resetForm = () => {
+  amount.value = props.trade.amount;
+};
 
-watch(
-  () => props.trade,
-  (newTrade) => {
-    if (newTrade) {
-      resetForm();
-    }
-  },
-  { immediate: true, deep: true }
-);
 </script>
 
 <template>
@@ -223,12 +223,8 @@ watch(
             <label class="block font-medium mb-1">补仓数量</label>
             <div class="flex items-center space-x-2">
               <InputNumber
-                :value="amount"
-                :min="0"
-                :step="1"
-                :max-fraction-digits="8"
+                v-model="amount"
                 class="w-full"
-                show-buttons
               />
               <small class="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">
                 {{ trade.base_currency }}
