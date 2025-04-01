@@ -84,7 +84,6 @@ jobs:
         zip -r ../freqUI.zip .
         cd ../
 
-
     - name: Upload release binaries
       uses: alexellis/upload-assets@0.4.1
       if: github.event_name == 'release' && matrix.node == '22'
