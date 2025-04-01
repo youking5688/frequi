@@ -95,7 +95,7 @@ jobs:
 
   call-docker-workflow:
     needs: build
-    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'release') && github.repository == 'freqtrade/frequi'
+    if: (github.event_name == 'push' || github.event_name == 'schedule' || github.event_name == 'release') && github.repository == 'youking5688/frequi'
     uses: ./.github/workflows/docker.yml
     secrets:
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
