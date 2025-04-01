@@ -168,7 +168,7 @@ const menuItems = computed<MenuItem[]>(() => [
   {
     label: 'Lock dynamic Layout',
     checkbox: true,
-    checked: layoutStore.layoutLocked,
+    checked: computed(() => layoutStore.layoutLocked),
     command: () => {
       layoutStore.layoutLocked = !layoutStore.layoutLocked;
     },

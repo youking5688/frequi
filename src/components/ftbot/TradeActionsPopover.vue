@@ -15,6 +15,7 @@ const emit = defineEmits<{
   reloadTrade: [trade: Trade];
   deleteTrade: [trade: Trade];
   forceEntry: [trade: Trade];
+  adjustPosition: [trade: Trade];
 }>();
 const popoverOpen = ref(false);
 
@@ -41,6 +42,10 @@ function handleDeleteTrade(item: Trade) {
 function handleForceEntry(item: Trade) {
   popoverOpen.value = false;
   emit('forceEntry', item);
+}
+function handleAdjustPosition(item: Trade) {
+  popoverOpen.value = false;
+  emit('adjustPosition', item);
 }
 const popover = ref<InstanceType<typeof Popover> | null>(null);
 </script>
@@ -74,6 +79,7 @@ const popover = ref<InstanceType<typeof Popover> | null>(null);
         @cancel-open-order="cancelOpenOrderHandler"
         @reload-trade="handleReloadTrade"
         @force-entry="handleForceEntry"
+        @adjust-position="handleAdjustPosition(trade)"
       />
       <Button
         class="mt-1 w-full text-start"

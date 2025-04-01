@@ -13,6 +13,7 @@ import type {
   MultiReloadTradePayload,
   ProfitInterface,
   Trade,
+  MultiAdjustPositionPayload
 } from '@/types';
 import { TimeSummaryOptions } from '@/types';
 import { createBotSubStore } from './ftbot';
@@ -385,6 +386,9 @@ export const useBotStore = defineStore('ftbot-wrapper', {
         }
       });
       await Promise.all(updates);
+    },
+    async adjustPositionMulti(adjustPositionPayload: MultiAdjustPositionPayload) {
+      return this.botStores[adjustPositionPayload.botId].adjustPosition(adjustPositionPayload);
     },
   },
 });

@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AdjustPositionForm: typeof import('./components/ftbot/AdjustPositionForm.vue')['default']
     Avatar: typeof import('primevue/avatar')['default']
     BackgroundJobTracking: typeof import('./components/ftbot/BackgroundJobTracking.vue')['default']
     BacktestGraphs: typeof import('./components/ftbot/BacktestGraphs.vue')['default']

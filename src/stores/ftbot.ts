@@ -53,6 +53,7 @@ import type {
   BacktestMarketChange,
   Markets,
   MarketsPayload,
+  MultiAdjustPositionPayload
 } from '@/types';
 import { BacktestSteps, LoadingStatus, RunModes, TimeSummaryOptions } from '@/types';
 import type { AxiosResponse } from 'axios';
@@ -1216,6 +1217,25 @@ export function createBotSubStore(botId: string, botName: string) {
             },
           },
         );
+      },
+
+      // 补仓api
+      async adjustPosition(payload: MultiAdjustPositionPayload) {
+        console.log('api接收到数据',payload);
+        try {
+          const res = await api.post<MultiAdjustPositionPayload, AxiosResponse<StatusResponse>>(
+            '/adjust_position',
+            payload,
+          );
+          showAlert(`补仓成功`, 'success');
+          return Promise.resolve(res);
+        } catch (error) {
+          if (axios.isAxiosError(error)) {
+            console.error(error.response);
+          }
+          showAlert(`补仓失败`, 'error');
+          return Promise.reject(error);
+        }
       },
     },
   });

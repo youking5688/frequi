@@ -30,6 +30,12 @@ export interface MultiBotIdPayload {
   botId: string;
 }
 
+export interface MultiAdjustPositionPayload {
+  tradeid: string | number;
+  botId: string;
+  quantity: number;
+}
+
 export type MultiDeletePayload = MultiBotIdPayload;
 export type MultiReloadTradePayload = MultiBotIdPayload;
 export type MultiCancelOpenOrderPayload = MultiBotIdPayload;

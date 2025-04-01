@@ -34,6 +34,9 @@ const confirmExitText = ref('');
 const confirmExitValue = ref<ModalReasons | null>(null);
 
 const increasePosition = ref({ visible: false, trade: {} as Trade });
+
+const adjustPositionVisible = ref(false);
+
 function formatPriceWithDecimals(price) {
   return formatPrice(price, botStore.activeBot.stakeCurrencyDecimals);
 }
@@ -161,6 +164,44 @@ const onRowClicked = ({ data: item, index }) => {
   }
 };
 
+const shouldHighlightRow = (trade: Trade) => {
+  // return trade.profit_ratio && trade.profit_ratio < -0.2;
+  return trade.profit_ratio && trade.profit_ratio < -0.3;
+};
+// 补仓
+function adjustPosition(item: Trade) {
+  feTrade.value = item;
+  adjustPositionVisible.value = true;
+  console.log('adjustPositionVisible',adjustPositionVisible.value);
+
+}
+// 处理补仓确认
+const handleAdjustPositionConfirm = async (adjustData) => {
+  console.log('handleAdjustPositionConfirm----补仓数据', adjustData);
+  // 解析字符串为数值
+  const amount = parseFloat(adjustData.amount);
+
+  if (isNaN(amount)) {
+    console.error('补仓数据--转换失败，输入数据无效', adjustData);
+    return;
+  }
+  console.log('转换后的数值:', { amount });
+  try {
+    // 调用补仓接口
+    await botStore.adjustPositionMulti({
+      tradeid: adjustData.trade_id,
+      botId: adjustData.botId,
+      quantity: amount,
+    });
+
+    // 补仓成功后，重新加载交易数据
+    reloadTradeHandler(feTrade.value);
+  } catch (error) {
+    console.error('补仓失败:', error);
+  }
+
+};
+
 watch(
   () => botStore.activeBot.detailTradeId,
   (val) => {
@@ -196,6 +237,7 @@ watch(
       :scrollable="true"
       scroll-height="flex"
       @row-click="onRowClicked"
+      :row-class="(data) => (shouldHighlightRow(data) ? 'highlight-row' : null)"
     >
       <template #empty>
         {{ emptyText }}
@@ -230,6 +272,7 @@ watch(
               @cancel-open-order="cancelOpenOrderHandler"
               @reload-trade="reloadTradeHandler"
               @force-entry="handleForceEntry"
+              @adjust-position="adjustPosition"
             />
           </template>
           <template v-else-if="field === 'stake_amount'">
@@ -275,6 +318,13 @@ watch(
       position-increase
     />
 
+    <!-- 补仓弹窗 -->
+    <AdjustPositionForm
+      v-model="adjustPositionVisible"
+      :trade="feTrade"
+      @confirmAdjustPosition="handleAdjustPositionConfirm"
+    />
+
     <Dialog v-model:visible="removeTradeVisible" :modal="true" header="Exit trade">
       <p>{{ confirmExitText }}</p>
       <template #footer>
@@ -284,3 +334,9 @@ watch(
     </Dialog>
   </div>
 </template>
+
+<style scoped>
+:deep(.highlight-row) {
+  background-color: rgba(255, 0, 0, 0.2) !important;
+}
+</style>

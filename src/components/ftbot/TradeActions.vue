@@ -21,6 +21,7 @@ defineEmits<{
   cancelOpenOrder: [trade: Trade];
   reloadTrade: [trade: Trade];
   deleteTrade: [trade: Trade];
+  adjustPosition: [trade: Trade];
   forceEntry: [trade: Trade];
 }>();
 </script>
@@ -116,7 +117,7 @@ defineEmits<{
     >
       <template #icon><i-mdi-reload-alert /> </template>
     </Button>
-    <Button
+    <!-- <Button
       class="justify-start!"
       size="small"
       severity="secondary"
@@ -126,6 +127,18 @@ defineEmits<{
     >
       <template #icon>
         <i-mdi-delete />
+      </template>
+    </Button> -->
+    <Button
+      class="justify-start!"
+      size="small"
+      severity="secondary"
+      title="Adjust position"
+      label="Adjust position"
+      @click="$emit('adjustPosition', trade)"
+    >
+      <template #icon>
+        <i-mdi-pencil />
       </template>
     </Button>
   </div>
