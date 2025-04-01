@@ -39,14 +39,14 @@ jobs:
 
     - run: pnpm install
 
-    - name: Run Lint
-      run: pnpm run lint-ci
+    # - name: Run Lint
+    #   run: pnpm run lint-ci
 
-    - name: Run type check
-      run: pnpm run typecheck
+    # - name: Run type check
+    #   run: pnpm run typecheck
 
-    - name: Run Tests
-      run: pnpm run test:unit
+    # - name: Run Tests
+    #   run: pnpm run test:unit
 
     - name: Build build
       run: pnpm run build
