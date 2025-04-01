@@ -153,7 +153,7 @@ watch(
 
 <template>
   <Dialog
-    v-model:visible="model"
+    :visible="model"
     header="补仓"
     @show="resetForm"
     @hide="resetForm"
@@ -166,7 +166,7 @@ watch(
           <div>
             <label class="block font-medium mb-1">持仓数量</label>
             <div class="flex items-center space-x-2">
-              <InputText v-model="trade.amount" readonly class="w-full" />
+              <InputText :value="trade.amount" readonly class="w-full" />
               <small class="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">
                 {{ trade.base_currency }}
               </small>
@@ -175,13 +175,13 @@ watch(
 
           <div>
             <label class="block font-medium mb-1">开仓价格</label>
-            <InputText v-model="trade.open_rate" readonly class="w-full" />
+            <InputText :value="trade.open_rate" readonly class="w-full" />
           </div>
 
           <div>
             <label class="block font-medium mb-1">持仓金额</label>
             <div class="flex items-center space-x-2">
-              <InputText v-model="trade.stake_amount" readonly class="w-full" />
+              <InputText :value="trade.stake_amount" readonly class="w-full" />
               <small class="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">
                 {{ trade.quote_currency }}
               </small>
@@ -195,12 +195,12 @@ watch(
 
           <div>
             <label class="block font-medium mb-1">持仓时间</label>
-            <InputText v-model="holdingTime" readonly class="w-full" />
+            <InputText :value="holdingTime" readonly class="w-full" />
           </div>
 
           <div>
             <label class="block font-medium mb-1">盈亏</label>
-            <InputText v-model="trade.total_profit_abs" readonly class="w-full" />
+            <InputText :value="trade.total_profit_abs" readonly class="w-full" />
           </div>
         </div>
 
@@ -209,21 +209,21 @@ watch(
           <div>
             <label class="block font-medium mb-1">可用资金</label>
             <div class="flex items-center space-x-2">
-              <InputText v-model="availableBalance" readonly class="w-full" />
+              <InputText :value="availableBalance" readonly class="w-full" />
               <small class="bg-gray-200 text-gray-800 px-2 py-1 rounded-md">USDT</small>
             </div>
           </div>
 
           <div>
             <label class="block font-medium mb-1">现价</label>
-            <InputText v-model="trade.current_rate" readonly class="w-full" />
+            <InputText :value="trade.current_rate" readonly class="w-full" />
           </div>
 
           <div>
             <label class="block font-medium mb-1">补仓数量</label>
             <div class="flex items-center space-x-2">
               <InputNumber
-                v-model="amount"
+                :value="amount"
                 :min="0"
                 :step="1"
                 :max-fraction-digits="8"
