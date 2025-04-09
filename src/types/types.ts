@@ -167,6 +167,8 @@ export interface BotState {
   timeframe_min: number;
   /** Given name of the bot */
   bot_name: string;
+  /** 送进ICU的订单亏损阈值 */
+  icu_loss_threshold: number;
 
   stoploss: number;
   stoploss_on_exchange?: boolean;

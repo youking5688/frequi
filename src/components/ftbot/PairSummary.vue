@@ -95,6 +95,11 @@ const combinedPairList = computed(() => {
   }
   return comb;
 });
+
+const shouldHighlightRow = (profit_ratio: number) => {
+  // return trade.profit_ratio && trade.profit_ratio < -0.2;
+  return profit_ratio && profit_ratio < botStore.activeBot.botState.icu_loss_threshold;
+};
 </script>
 
 <template>
@@ -127,6 +132,10 @@ const combinedPairList = computed(() => {
           'bg-primary dark:border-primary text-primary-contrast':
             comb.pair === botStore.activeBot.selectedPair,
         }"
+        :style="{
+          backgroundColor: shouldHighlightRow(comb.profit) ? 'rgba(255, 0, 0, 0.2)' : '',
+        }"
+
         :title="`${formatPriceCurrency(comb.profitAbs, botStore.activeBot.stakeCurrency, botStore.activeBot.stakeCurrencyDecimals)} - ${comb.pair} - ${comb.tradeCount} trades`"
         @click="botStore.activeBot.selectedPair = comb.pair"
       >

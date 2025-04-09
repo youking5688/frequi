@@ -166,7 +166,7 @@ const onRowClicked = ({ data: item, index }) => {
 
 const shouldHighlightRow = (trade: Trade) => {
   // return trade.profit_ratio && trade.profit_ratio < -0.2;
-  return trade.profit_ratio && trade.profit_ratio < -0.1;
+  return trade.profit_ratio && trade.profit_ratio < botStore.activeBot.botState.icu_loss_threshold;
 };
 // 补仓
 function adjustPosition(item: Trade) {
