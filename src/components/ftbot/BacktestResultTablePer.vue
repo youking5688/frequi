@@ -56,9 +56,34 @@ const perTagReason = computed(() => {
   }
   return firstFields;
 });
+
+const settingsStore = useSettingsStore();
+
+const metrics = computed(() =>
+  availableBacktestMetrics.value.filter(
+    (metric) =>
+      metric.field !== 'key' && settingsStore.backtestAdditionalMetrics.includes(metric.field),
+  ),
+);
 </script>
 <template>
-  <DraggableContainer :header="title">
+  <DraggableContainer>
+    <template #header>
+      <div class="flex flex-row w-full justify-between items-center">
+        {{ title }}
+        <div>
+          Shown metrics:
+          <MultiSelect
+            id="backtestMetrics"
+            v-model="settingsStore.backtestAdditionalMetrics"
+            :options="availableBacktestMetrics"
+            option-label="header"
+            option-value="field"
+            size="small"
+          />
+        </div>
+      </div>
+    </template>
     <DataTable size="small" hover stacked="sm" :value="tableItems">
       <Column v-for="col in perTagReason" :key="col.key" :field="col.key" :header="col.label">
         <template #body="{ data }">
@@ -84,6 +109,12 @@ const perTagReason = computed(() => {
       <Column field="wins" header="Wins"></Column>
       <Column field="draws" header="Draws"></Column>
       <Column field="losses" header="Losses"></Column>
+
+      <Column v-for="col in metrics" :key="col.field" :field="col.field" :header="col.header">
+        <template #body="{ data, field }">
+          {{ col.is_ratio ? formatPercent(data[field], 2) : formatPrice(data[field], 2) }}
+        </template>
+      </Column>
     </DataTable>
   </DraggableContainer>
 </template>
